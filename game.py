@@ -1,38 +1,27 @@
 import os
 import pygame
 
+from Pieces import King, Queen, Rook, Bishop, Knight, Pawn
 
-
-#loading imgs
-b_king = pygame.image.load(os.path.join("img", "black_king.png"))
-b_queen = pygame.image.load(os.path.join("img", "black_queen.png"))
-b_bishop = pygame.image.load(os.path.join("img", "black_bishop.png"))
-b_pawn = pygame.image.load(os.path.join("img", "black_pawn.png"))
-b_rook = pygame.image.load(os.path.join("img", "black_rook.png"))
-b_knight = pygame.image.load(os.path.join("img", "black_knight.png"))
-
-w_king = pygame.image.load(os.path.join("img", "white_king.png"))
-w_queen = pygame.image.load(os.path.join("img", "white_queen.png"))
-w_bishop = pygame.image.load(os.path.join("img", "white_bishop.png"))
-w_pawn = pygame.image.load(os.path.join("img", "white_pawn.png"))
-w_rook = pygame.image.load(os.path.join("img", "white_rook.png"))
-w_knight = pygame.image.load(os.path.join("img", "white_knight.png"))
 board = pygame.image.load(os.path.join("img", "board.png"))
+Board = pygame.transform.scale_by(board, 3.8)
 
-# scaling small imgs
-b = [b_king, b_queen, b_rook, b_bishop, b_knight, b_pawn]
-w = [w_king, w_queen, w_rook, w_bishop, w_knight, w_pawn]
-Board = pygame.transform.scale_by(board, 3.5)
+SQUARE_W = 86
+SQUARE_H = 86
 
-B = []
-W = []
-for piece in b:
-    B.append(pygame.transform.scale2x(piece))
-for piece in w:
-    W.append(pygame.transform.scale2x(piece))
 
 def re_draw_window():
+    win.fill("purple")
+    win.blit(Board, (board_x, board_y))
+    for x in range(8):
+        for y in range(8):
+            # pygame.draw.rect(win, (255, 0, 0), (board_x+SQUARE_W*x, board_y+SQUARE_H*y, SQUARE_W, SQUARE_H), 1)
+            king = Pawn(win, x, y, "w")
+            king.draw()
+    
+    
     pygame.display.update()
+    
 
 
 def main():
@@ -41,8 +30,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        win.fill("purple")
-        win.blit(Board, ((width//2)-Board.get_width()//2, (height//2)-Board.get_height()//2))
+        
 
         re_draw_window()
         
@@ -53,10 +41,19 @@ def main():
 
 # pygame setup
 pygame.init()
-width = 1280
+width = 1000
 height = 720
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("chess game")
 clock = pygame.time.Clock()
+
+board_x = (width//2)-Board.get_width()//2
+board_y = (height//2)-Board.get_height()//2
+
+print(board_x)
+print(board_y)
+
+
+
 
 main()
