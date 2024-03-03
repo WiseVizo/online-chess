@@ -1,11 +1,7 @@
 import os
 import pygame
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-running = True
+
 
 #loading imgs
 b_king = pygame.image.load(os.path.join("img", "black_king.png"))
@@ -21,22 +17,46 @@ w_bishop = pygame.image.load(os.path.join("img", "white_bishop.png"))
 w_pawn = pygame.image.load(os.path.join("img", "white_pawn.png"))
 w_rook = pygame.image.load(os.path.join("img", "white_rook.png"))
 w_knight = pygame.image.load(os.path.join("img", "white_knight.png"))
+board = pygame.image.load(os.path.join("img", "board.png"))
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+# scaling small imgs
+b = [b_king, b_queen, b_rook, b_bishop, b_knight, b_pawn]
+w = [w_king, w_queen, w_rook, w_bishop, w_knight, w_pawn]
+Board = pygame.transform.scale_by(board, 3.5)
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+B = []
+W = []
+for piece in b:
+    B.append(pygame.transform.scale2x(piece))
+for piece in w:
+    W.append(pygame.transform.scale2x(piece))
 
-    # RENDER YOUR GAME HERE
+def re_draw_window():
+    pygame.display.update()
 
-    # flip() the display to put your work on screen
-    pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+def main():
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        win.fill("purple")
+        win.blit(Board, ((width//2)-Board.get_width()//2, (height//2)-Board.get_height()//2))
 
-pygame.quit()
+        re_draw_window()
+        
+
+        clock.tick(60) 
+    pygame.quit()
+
+
+# pygame setup
+pygame.init()
+width = 1280
+height = 720
+win = pygame.display.set_mode((width, height))
+pygame.display.set_caption("chess game")
+clock = pygame.time.Clock()
+
+main()
