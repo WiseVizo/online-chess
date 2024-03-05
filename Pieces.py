@@ -38,13 +38,12 @@ class Piece:
     color: color
     piece_index: for selecting the img from W, B list 
     """
-    def __init__(self, screen, row, column, color, piece_index):
+    def __init__(self, row, column, color, piece_index):
         self.row = row
         self.column = column
         self.color = color
         self.selected = False
         self.image = None
-        self.screen = screen
         self.piece_index = piece_index
 
     def is_selected(self):
@@ -53,34 +52,34 @@ class Piece:
     def move(self):
         pass
 
-    def draw(self):
+    def draw(self, screen):
         if self.color == "w":
             self.image = W[self.piece_index]
         else:
             self.image = B[self.piece_index]
-        self.screen.blit(self.image, (board_x + self.column*SQUARE, board_y + self.row*SQUARE))
+        screen.blit(self.image, (board_x + self.column*SQUARE, board_y + self.row*SQUARE))
 
 
 
 class King(Piece):
-    def __init__(self, screen, row, column, color):
-        super().__init__(screen, row, column, color, 0)
+    def __init__(self,  row, column, color):
+        super().__init__( row, column, color, 0)
     
 class Queen(Piece):
-     def __init__(self, screen, row, column, color):
-        super().__init__(screen, row, column, color, 1)
+     def __init__(self,  row, column, color):
+        super().__init__( row, column, color, 1)
 class Rook(Piece):
-     def __init__(self, screen, row, column, color):
-        super().__init__(screen, row, column, color, 2)
+     def __init__(self,  row, column, color):
+        super().__init__( row, column, color, 2)
 class Bishop(Piece):
-     def __init__(self, screen, row, column, color):
-        super().__init__(screen, row, column, color, 3)
+     def __init__(self,  row, column, color):
+        super().__init__( row, column, color, 3)
 class Knight(Piece):
-     def __init__(self, screen, row, column, color):
-        super().__init__(screen, row, column, color, 4)
+     def __init__(self,  row, column, color):
+        super().__init__( row, column, color, 4)
 class Pawn(Piece):
-     def __init__(self, screen, row, column, color):
-        super().__init__(screen, row, column, color, 5)
+     def __init__(self, row, column, color):
+        super().__init__( row, column, color, 5)
 
         
         

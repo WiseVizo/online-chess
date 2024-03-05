@@ -1,24 +1,23 @@
 import os
 import pygame
+from Board import Board
 
-from Pieces import King, Queen, Rook, Bishop, Knight, Pawn
 
 board = pygame.image.load(os.path.join("img", "board.png"))
-Board = pygame.transform.scale_by(board, 3.8)
+Board_img = pygame.transform.scale_by(board, 3.8)
 
 SQUARE_W = 86
 SQUARE_H = 86
 
+my_board = Board()
+my_board.fill_board()
 
 def re_draw_window():
     win.fill("purple")
-    win.blit(Board, (board_x, board_y))
-    for x in range(8):
-        for y in range(8):
-            # pygame.draw.rect(win, (255, 0, 0), (board_x+SQUARE_W*x, board_y+SQUARE_H*y, SQUARE_W, SQUARE_H), 1)
-            king = Pawn(win, x, y, "w")
-            king.draw()
-    
+    win.blit(Board_img, (board_x, board_y))
+
+    my_board.draw_board(win)
+
     
     pygame.display.update()
     
@@ -47,13 +46,8 @@ win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("chess game")
 clock = pygame.time.Clock()
 
-board_x = (width//2)-Board.get_width()//2
-board_y = (height//2)-Board.get_height()//2
-
-print(board_x)
-print(board_y)
-
-
+board_x = (width//2)-Board_img.get_width()//2
+board_y = (height//2)-Board_img.get_height()//2
 
 
 main()
