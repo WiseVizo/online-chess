@@ -12,13 +12,20 @@ SQUARE_H = 86
 my_board = Board()
 my_board.fill_board()
 
+def on_click(pos):
+    """
+    its kinda inaccurate if we click on very edge of the square but as long as we stay near center it works :D
+    pos: (x, y)
+    return: (row, col) in the board
+    """
+    col = (pos[0] - board_x)//SQUARE_H
+    row = (pos[1] - board_y)//SQUARE_H
+    return (row, col)
+
 def re_draw_window():
     win.fill("purple")
     win.blit(Board_img, (board_x, board_y))
-
-    my_board.draw_board(win)
-
-    
+    my_board.draw_board(win)  
     pygame.display.update()
     
 
@@ -29,7 +36,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                print(on_click(pos))
 
         re_draw_window()
         
@@ -49,5 +58,7 @@ clock = pygame.time.Clock()
 board_x = (width//2)-Board_img.get_width()//2
 board_y = (height//2)-Board_img.get_height()//2
 
+print(board_x)
+print(board_y)
 
 main()
