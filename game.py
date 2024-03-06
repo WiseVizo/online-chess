@@ -31,6 +31,7 @@ def re_draw_window():
 
 
 def main():
+    global my_board, selected_piece
     running = True
     while running:
         for event in pygame.event.get():
@@ -38,7 +39,22 @@ def main():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                print(on_click(pos))
+                row, col = on_click(pos)
+                print(row, col)
+                if (0<=row<=7) and (0<=col<=7):
+                    if my_board.board[row][col]:
+                        if selected_piece[0] == 0:
+                            selected_piece[0] = (row, col)
+                            my_board.board[row][col].selected = True
+                        elif selected_piece[0] and not selected_piece[1]:
+                            my_board.board[selected_piece[0][0]][selected_piece[0][1]].selected = False
+                            selected_piece[1] = (row, col)
+                            my_board.board[row][col].selected = True
+                        elif selected_piece[0] and selected_piece[1]:
+                            my_board.board[selected_piece[1][0]][selected_piece[1][1]].selected = False
+                            selected_piece[0] = selected_piece[1]
+                            selected_piece[1] = (row, col)
+                            my_board.board[row][col].selected = True
 
         re_draw_window()
         
@@ -58,7 +74,6 @@ clock = pygame.time.Clock()
 board_x = (width//2)-Board_img.get_width()//2
 board_y = (height//2)-Board_img.get_height()//2
 
-print(board_x)
-print(board_y)
+selected_piece = [0, 0] # it is to keep track of previous selected piece and last ele of the list will be current selected piece
 
 main()

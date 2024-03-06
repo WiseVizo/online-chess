@@ -57,8 +57,11 @@ class Piece:
             self.image = W[self.piece_index]
         else:
             self.image = B[self.piece_index]
-        screen.blit(self.image, (board_x + self.column*SQUARE, board_y + self.row*SQUARE))
-
+        x = board_x + self.column*SQUARE
+        y = board_y + self.row*SQUARE
+        screen.blit(self.image, (x, y))
+        if self.selected:
+            pygame.draw.rect(screen, (255, 0, 0), (x, y, SQUARE, SQUARE), 2)
 
 
 class King(Piece):
