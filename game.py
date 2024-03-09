@@ -3,11 +3,11 @@ import pygame
 from Board import Board
 
 
-board = pygame.image.load(os.path.join("img", "board.png"))
-Board_img = pygame.transform.scale_by(board, 4)
+board = pygame.image.load(os.path.join("img", "grey-board.png"))
+Board_img = pygame.transform.scale_by(board, 1.18)
 
-SQUARE_W = 86
-SQUARE_H = 86
+SQUARE_W = 88
+SQUARE_H = 88
 
 my_board = Board()
 my_board.fill_board()
@@ -73,6 +73,8 @@ clock = pygame.time.Clock()
 
 board_x = (width//2)-Board_img.get_width()//2
 board_y = (height//2)-Board_img.get_height()//2
+print(board_x)
+print(board_y)
 
 selected_piece = [0, 0] # it is to keep track of previous selected piece and last ele of the list will be current selected piece
 

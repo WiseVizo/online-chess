@@ -26,9 +26,10 @@ for piece in b:
 for piece in w:
     W.append(pygame.transform.scale(piece, (64, 64)))
 
-board_x = 168
-board_y = 28
-SQUARE = 86
+board_x = 147
+board_y = 7
+SQUARE = 88
+overlap = 0.8
 
 class Piece:
     """
@@ -88,7 +89,8 @@ class Pawn(Piece):
         super().__init__( row, column, color, 5)
      def move(self, screen, board, x , y):
         # show all possible moves for white
-         if self.first_move:
+        if self.color == "w":
+            if self.first_move:
              y = y - SQUARE
              pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
              y = y - SQUARE

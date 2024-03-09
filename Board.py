@@ -1,5 +1,10 @@
 from Pieces import King, Queen, Rook, Bishop, Knight, Pawn
+import pygame
 
+overlap = 0.8
+board_x = 147
+board_y = 7
+sqr = 88
 class Board:
     def __init__(self):
         self.board = [[[] for _ in range(8)] for _ in range(8)]
@@ -35,6 +40,7 @@ class Board:
     def draw_board(self, screen):
         for row in range(8):
             for col in range(8):
+                pygame.draw.rect(screen, (255, 0 , 0), (board_x + (col*sqr+col*overlap), board_y + (row*sqr + row*overlap), sqr, sqr), 1)
                 if self.board[row][col]:
                     self.board[row][col].draw(screen, self.board)
 
