@@ -3,11 +3,11 @@ import pygame
 from Board import Board
 
 
-board = pygame.image.load(os.path.join("img", "board.png"))
-Board_img = pygame.transform.scale_by(board, 4)
+board = pygame.image.load(os.path.join("img", "grey-board.png"))
+Board_img = pygame.transform.scale_by(board, 1.18)
 
-SQUARE_W = 86
-SQUARE_H = 86
+SQUARE_W = 88
+SQUARE_H = 88
 
 my_board = Board()
 my_board.fill_board()
