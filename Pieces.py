@@ -49,10 +49,10 @@ class Piece:
     def is_selected(self):
         return self.selected
     
-    def move(self):
+    def move(self, screen, board, x, y):
         pass
 
-    def draw(self, screen):
+    def draw(self, screen, board):
         if self.color == "w":
             self.image = W[self.piece_index]
         else:
@@ -62,6 +62,7 @@ class Piece:
         screen.blit(self.image, (x, y))
         if self.selected:
             pygame.draw.rect(screen, (255, 0, 0), (x, y, SQUARE, SQUARE), 2)
+            self.move(screen, board, x, y)
 
 
 class King(Piece):
@@ -80,9 +81,20 @@ class Bishop(Piece):
 class Knight(Piece):
      def __init__(self,  row, column, color):
         super().__init__( row, column, color, 4)
+
 class Pawn(Piece):
      def __init__(self, row, column, color):
+        self.first_move = True
         super().__init__( row, column, color, 5)
+     def move(self, screen, board, x , y):
+        # show all possible moves for white
+         if self.first_move:
+             y = y - SQUARE
+             pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
+             y = y - SQUARE
+             pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
+         
+
 
         
         

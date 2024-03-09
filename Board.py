@@ -36,7 +36,7 @@ class Board:
         for row in range(8):
             for col in range(8):
                 if self.board[row][col]:
-                    self.board[row][col].draw(screen)
+                    self.board[row][col].draw(screen, self.board)
 
 
     

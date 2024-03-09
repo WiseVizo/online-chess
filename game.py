@@ -4,7 +4,7 @@ from Board import Board
 
 
 board = pygame.image.load(os.path.join("img", "board.png"))
-Board_img = pygame.transform.scale_by(board, 3.8)
+Board_img = pygame.transform.scale_by(board, 4)
 
 SQUARE_W = 86
 SQUARE_H = 86
