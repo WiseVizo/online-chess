@@ -30,6 +30,8 @@ board_x = 147
 board_y = 7
 SQUARE = 88
 overlap = 0.8
+offset_x = 10
+offset_y = 10
 
 class Piece:
     """
@@ -58,9 +60,9 @@ class Piece:
             self.image = W[self.piece_index]
         else:
             self.image = B[self.piece_index]
-        x = board_x + self.column*SQUARE
-        y = board_y + self.row*SQUARE
-        screen.blit(self.image, (x, y))
+        x = board_x + self.column*SQUARE + self.column*overlap
+        y = board_y + self.row*SQUARE + self.column*overlap
+        screen.blit(self.image, (x+ offset_x, y+ offset_y))
         if self.selected:
             pygame.draw.rect(screen, (255, 0, 0), (x, y, SQUARE, SQUARE), 2)
             self.move(screen, board, x, y)

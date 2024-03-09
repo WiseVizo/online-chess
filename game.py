@@ -73,8 +73,6 @@ clock = pygame.time.Clock()
 
 board_x = (width//2)-Board_img.get_width()//2
 board_y = (height//2)-Board_img.get_height()//2
-print(board_x)
-print(board_y)
 
 selected_piece = [0, 0] # it is to keep track of previous selected piece and last ele of the list will be current selected piece
 
