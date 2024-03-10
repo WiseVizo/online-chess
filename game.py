@@ -55,6 +55,10 @@ def main():
                             selected_piece[0] = selected_piece[1]
                             selected_piece[1] = (row, col)
                             my_board.board[row][col].selected = True
+                s_row, s_col = my_board.selected_piece()
+                if s_row and s_col:
+                    print(s_row, s_col)
+
 
         re_draw_window()
         

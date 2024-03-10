@@ -44,6 +44,14 @@ class Board:
                 if self.board[row][col]:
                     self.board[row][col].draw(screen, self.board)
 
+    def selected_piece(self):
+        """
+        return: row and col of selected piece
+        """
+        for row in range(8):
+            for col in range(8):
+                if self.board[row][col] and self.board[row][col].is_selected():
+                    return (row, col) 
 
     
 if __name__ == "__main__":
