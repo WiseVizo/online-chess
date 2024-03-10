@@ -90,14 +90,18 @@ class Pawn(Piece):
         self.first_move = True
         super().__init__( row, column, color, 5)
      def move(self, screen, board, x , y):
+        moves = [] # 1st ele -> piece,  2nd ele -> [(row, col) , (row, col)] i.e all possible moves
+
         # show all possible moves for white
         if self.color == "w":
             if self.first_move:
-             y = y - SQUARE
-             pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
-             y = y - SQUARE
-             pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
-         
+                y = y - SQUARE
+                pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
+                y = y - SQUARE
+                pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
+            else:
+                y = y - SQUARE
+                pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
 
 
         
