@@ -88,10 +88,12 @@ class Knight(Piece):
 class Pawn(Piece):
      def __init__(self, row, column, color):
         self.first_move = True
-        super().__init__( row, column, color, 5)
-     def move(self, screen, board, x , y):
-        moves = [] # 1st ele -> piece,  2nd ele -> [(row, col) , (row, col)] i.e all possible moves
+        self.row = row
+        self.col = column
+        super().__init__( self.row, self.col, color, 5)
 
+     def move(self, screen, board, x , y):
+    
         # show all possible moves for white
         if self.color == "w":
             if self.first_move:
@@ -102,7 +104,14 @@ class Pawn(Piece):
             else:
                 y = y - SQUARE
                 pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
-
-
         
-        
+
+     def possible_moves(self):
+        moves = [] # all possible moves (row, col) format
+        if self.color == "w":
+            if self.first_move:
+                moves.append((self.row-1, self.col))
+                moves.append((self.row-2, self.col))
+            else:
+                moves.append((self.row-1, self.col))
+        return moves

@@ -46,12 +46,12 @@ class Board:
 
     def selected_piece(self):
         """
-        return: row and col of selected piece
+        return: selected_piece obj , row and col of selected piece
         """
         for row in range(8):
             for col in range(8):
                 if self.board[row][col] and self.board[row][col].is_selected():
-                    return (row, col) 
+                    return (self.board[row][col], row, col) 
 
     
 if __name__ == "__main__":

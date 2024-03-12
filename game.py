@@ -28,10 +28,21 @@ def re_draw_window():
     my_board.draw_board(win)  
     pygame.display.update()
     
-
+def match_moves(row, col, moves):
+    """
+    checks if given row and col are present in moves list 
+    row: int
+    col: int
+    moves: [(row, col), ....]
+    return: True or False  
+    """
+    for move in moves:
+        if move[0] == row and move[1] == col:
+            return True
+    return False
 
 def main():
-    global my_board, selected_piece
+    global my_board, current_selected_piece
     running = True
     while running:
         for event in pygame.event.get():
@@ -43,22 +54,31 @@ def main():
                 print(row, col)
                 if (0<=row<=7) and (0<=col<=7):
                     if my_board.board[row][col]:
-                        if selected_piece[0] == 0:
-                            selected_piece[0] = (row, col)
+                        if current_selected_piece[0] == 0:
+                            current_selected_piece[0] = (row, col)
                             my_board.board[row][col].selected = True
-                        elif selected_piece[0] and not selected_piece[1]:
-                            my_board.board[selected_piece[0][0]][selected_piece[0][1]].selected = False
-                            selected_piece[1] = (row, col)
+                        elif current_selected_piece[0] and not current_selected_piece[1]:
+                            my_board.board[current_selected_piece[0][0]][current_selected_piece[0][1]].selected = False
+                            current_selected_piece[1] = (row, col)
                             my_board.board[row][col].selected = True
-                        elif selected_piece[0] and selected_piece[1]:
-                            my_board.board[selected_piece[1][0]][selected_piece[1][1]].selected = False
-                            selected_piece[0] = selected_piece[1]
-                            selected_piece[1] = (row, col)
+                        elif current_selected_piece[0] and current_selected_piece[1]:
+                            my_board.board[current_selected_piece[1][0]][current_selected_piece[1][1]].selected = False
+                            current_selected_piece[0] = current_selected_piece[1]
+                            current_selected_piece[1] = (row, col)
                             my_board.board[row][col].selected = True
-                s_row, s_col = my_board.selected_piece()
-                if s_row and s_col:
-                    print(s_row, s_col)
-
+                s_piece, s_row, s_col = my_board.selected_piece()
+                if s_piece:
+                    moves = s_piece.possible_moves()
+                    print(f"moves for [{s_piece}]:  {moves}")
+                    if match_moves(row, col, moves):
+                        print("in board updatition")
+                        #update board
+                        my_board.board[s_piece.row][s_piece.col] = 0
+                        s_piece.row = row
+                        s_piece.col = col
+                        my_board.board[row][col] = s_piece
+                        s_piece.selected = False
+                        current_selected_piece = [0, 0]
 
         re_draw_window()
         
@@ -78,6 +98,6 @@ clock = pygame.time.Clock()
 board_x = (width//2)-Board_img.get_width()//2
 board_y = (height//2)-Board_img.get_height()//2
 
-selected_piece = [0, 0] # it is to keep track of previous selected piece and last ele of the list will be current selected piece
+current_selected_piece = [0, 0] # it is to keep track of previous selected piece and last ele of the list will be current selected piece
 
 main()
