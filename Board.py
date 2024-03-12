@@ -40,18 +40,18 @@ class Board:
     def draw_board(self, screen):
         for row in range(8):
             for col in range(8):
-                pygame.draw.rect(screen, (255, 0 , 0), (board_x + (col*sqr+col*overlap), board_y + (row*sqr + row*overlap), sqr, sqr), 1)
+                # pygame.draw.rect(screen, (255, 0 , 0), (board_x + (col*sqr+col*overlap), board_y + (row*sqr + row*overlap), sqr, sqr), 1)
                 if self.board[row][col]:
                     self.board[row][col].draw(screen, self.board)
 
     def selected_piece(self):
         """
-        return: selected_piece obj , row and col of selected piece
+        return: selected_piece obj 
         """
         for row in range(8):
             for col in range(8):
                 if self.board[row][col] and self.board[row][col].is_selected():
-                    return (self.board[row][col], row, col) 
+                    return (self.board[row][col]) 
 
     
 if __name__ == "__main__":

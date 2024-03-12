@@ -3,15 +3,6 @@ import pygame
 from Board import Board
 
 
-board = pygame.image.load(os.path.join("img", "grey-board.png"))
-Board_img = pygame.transform.scale_by(board, 1.18)
-
-SQUARE_W = 88
-SQUARE_H = 88
-
-my_board = Board()
-my_board.fill_board()
-
 def on_click(pos):
     """
     its kinda inaccurate if we click on very edge of the square but as long as we stay near center it works :D
@@ -27,7 +18,14 @@ def re_draw_window():
     win.blit(Board_img, (board_x, board_y))
     my_board.draw_board(win)  
     pygame.display.update()
-    
+
+def is_within_board(row, col):
+    """
+    return: True/False if given coordinate is within the board
+    """
+    return (0<=row<=7) and (0<=col<=7)
+
+
 def match_moves(row, col, moves):
     """
     checks if given row and col are present in moves list 
@@ -36,10 +34,22 @@ def match_moves(row, col, moves):
     moves: [(row, col), ....]
     return: True or False  
     """
+    if not moves: return False
     for move in moves:
         if move[0] == row and move[1] == col:
             return True
     return False
+
+def is_valid_move(target):
+    """
+    target: [row, col]
+    return: Boolean 
+    """
+    #check if target location is empty
+    if not my_board.board[target[0]][target[1]]:
+        return True
+    return False
+
 
 def main():
     global my_board, current_selected_piece
@@ -52,7 +62,7 @@ def main():
                 pos = pygame.mouse.get_pos()
                 row, col = on_click(pos)
                 print(row, col)
-                if (0<=row<=7) and (0<=col<=7):
+                if is_within_board(row, col):
                     if my_board.board[row][col]:
                         if current_selected_piece[0] == 0:
                             current_selected_piece[0] = (row, col)
@@ -66,26 +76,38 @@ def main():
                             current_selected_piece[0] = current_selected_piece[1]
                             current_selected_piece[1] = (row, col)
                             my_board.board[row][col].selected = True
-                s_piece, s_row, s_col = my_board.selected_piece()
+                s_piece = my_board.selected_piece()
                 if s_piece:
-                    moves = s_piece.possible_moves()
+                    moves = s_piece.possible_moves(my_board.board)
                     print(f"moves for [{s_piece}]:  {moves}")
+
                     if match_moves(row, col, moves):
                         print("in board updatition")
-                        #update board
-                        my_board.board[s_piece.row][s_piece.col] = 0
-                        s_piece.row = row
-                        s_piece.col = col
-                        my_board.board[row][col] = s_piece
-                        s_piece.selected = False
-                        current_selected_piece = [0, 0]
+                        if is_valid_move([row, col]):
+                            #update board
+                            my_board.board[s_piece.row][s_piece.col] = 0
+                            s_piece.row = row
+                            s_piece.col = col
+                            my_board.board[row][col] = s_piece
+                            # special case for pawns
+                            if "Pawn" in str(s_piece):
+                                s_piece.first_move = False
+                            #reset
+                            s_piece.selected = False
+                            current_selected_piece = [0, 0]
 
         re_draw_window()
-        
-
         clock.tick(60) 
     pygame.quit()
 
+board = pygame.image.load(os.path.join("img", "grey-board.png"))
+Board_img = pygame.transform.scale_by(board, 1.18)
+
+SQUARE_W = 88
+SQUARE_H = 88
+
+my_board = Board()
+my_board.fill_board()
 
 # pygame setup
 pygame.init()
