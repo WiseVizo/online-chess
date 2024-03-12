@@ -55,6 +55,9 @@ class Piece:
     def move(self, screen, board, x, y):
         pass
 
+    def possible_moves(self, board):
+        pass
+
     def draw(self, screen, board):
         if self.color == "w":
             self.image = W[self.piece_index]
@@ -64,9 +67,13 @@ class Piece:
         y = board_y + self.row*SQUARE + self.column*overlap
         screen.blit(self.image, (x+ offset_x, y+ offset_y))
         if self.selected:
-            pygame.draw.rect(screen, (255, 0, 0), (x, y, SQUARE, SQUARE), 2)
+            # pygame.draw.rect(screen, (255, 0, 0), (x, y, SQUARE, SQUARE), 2)
             self.move(screen, board, x, y)
 
+    def __str__(self) -> str:
+        if self.color == "w":
+            return "white_"+ __class__.__name__
+        return "black_"+__class__.__name__
 
 class King(Piece):
     def __init__(self,  row, column, color):
@@ -82,8 +89,15 @@ class Bishop(Piece):
      def __init__(self,  row, column, color):
         super().__init__( row, column, color, 3)
 class Knight(Piece):
-     def __init__(self,  row, column, color):
+    def __init__(self,  row, column, color):
         super().__init__( row, column, color, 4)
+    
+    def __str__(self) -> str:
+        if self.color == "w":
+            return "white_"+ __class__.__name__
+        return "black_"+__class__.__name__
+
+
 
 class Pawn(Piece):
      def __init__(self, row, column, color):
@@ -92,26 +106,50 @@ class Pawn(Piece):
         self.col = column
         super().__init__( self.row, self.col, color, 5)
 
-     def move(self, screen, board, x , y):
-    
-        # show all possible moves for white
+     def __str__(self) -> str:
         if self.color == "w":
-            if self.first_move:
-                y = y - SQUARE
-                pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
-                y = y - SQUARE
-                pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
-            else:
-                y = y - SQUARE
-                pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
-        
+            return "white_"+ __class__.__name__
+        return "black_"+__class__.__name__
 
-     def possible_moves(self):
+     def move(self, screen, board, x , y):
+        
+        moves = self.possible_moves(board)
+        if not moves: return
+        for move in moves:
+            x = board_x + move[1]*SQUARE + self.column*overlap
+            y = board_y + move[0]*SQUARE + self.column*overlap
+            pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
+
+     def possible_moves(self, board):
         moves = [] # all possible moves (row, col) format
         if self.color == "w":
             if self.first_move:
-                moves.append((self.row-1, self.col))
-                moves.append((self.row-2, self.col))
+                if not board[self.row-1][self.col]:
+                    moves.append((self.row-1, self.col))
+                    if not board[self.row-2][self.col]:
+                        moves.append((self.row-2, self.col))
+                else:
+                    print("invalid move")
             else:
-                moves.append((self.row-1, self.col))
+                if not board[self.row-1][self.col]:
+                    moves.append((self.row-1, self.col))
+                else:
+                    print("invalid move")
+
+     
+        if self.color == "b":
+            if self.first_move:
+                if not board[self.row+1][self.col]:
+                    moves.append((self.row+1, self.col))
+                    if not board[self.row+2][self.col]:
+                        moves.append((self.row+2, self.col))
+                else:
+                    print("invalid move")
+            else:
+                if not board[self.row+1][self.col]:
+                    moves.append((self.row+1, self.col))
+                else:
+                    print("invalid move")
         return moves
+     
+    
