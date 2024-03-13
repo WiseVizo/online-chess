@@ -33,7 +33,7 @@ overlap = 0.8
 offset_x = 10
 offset_y = 10
 
-def is_valid_move( target, board):
+def is_valid_move_pawn( target, board):
     """
     target: [row, col]
     return: Boolean 
@@ -44,6 +44,23 @@ def is_valid_move( target, board):
             return True
     return False
 
+def is_valid_move(target: list, board: list, color:str)->bool:
+    """
+    will tell if it is a valid move for all the other pieces except pawns
+    target: [row, col]
+    board:  a 2d list of board 
+    color: color of the current piece
+    """
+    if (0<=target[0]<=7) and (0<=target[1]<=7):
+        #check if target location is empty
+        if not board[target[0]][target[1]]:
+            return True
+        else:
+            if board[target[0]][target[1]].color == color:
+                return False
+            else:
+                return True
+    return False
 class Piece:
     """
     screen: pygame surface
@@ -69,7 +86,8 @@ class Piece:
         for move in moves:
             x = board_x + move[1]*SQUARE + self.col*overlap
             y = board_y + move[0]*SQUARE + self.col*overlap
-            pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
+            # pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
+            pygame.draw.circle(screen, (255, 0, 0), (x+SQUARE*0.5, y+SQUARE*0.5), 30, 5)
 
     def possible_moves(self, board):
         pass
@@ -130,45 +148,45 @@ class Knight(Piece):
         # for white
         if self.color == "w":
             #top
-            if is_valid_move([self.row-2, self.col-1], board):
+            if is_valid_move([self.row-2, self.col-1], board, self.color):
                 moves.append((self.row-2, self.col-1))
-            if is_valid_move([self.row-2, self.col+1], board):
+            if is_valid_move([self.row-2, self.col+1], board, self.color):
                 moves.append((self.row-2, self.col+1)) 
             #bottom 
-            if is_valid_move([self.row+2, self.col-1], board):
+            if is_valid_move([self.row+2, self.col-1], board, self.color):
                 moves.append((self.row+2, self.col-1))
-            if is_valid_move([self.row+2, self.col+1], board):
+            if is_valid_move([self.row+2, self.col+1], board, self.color):
                 moves.append((self.row+2, self.col+1)) 
             #left
-            if is_valid_move([self.row+1, self.col-2], board):
+            if is_valid_move([self.row+1, self.col-2], board, self.color):
                 moves.append((self.row+1, self.col-2))
-            if is_valid_move([self.row-1, self.col-2], board):
+            if is_valid_move([self.row-1, self.col-2], board, self.color):
                 moves.append((self.row-1, self.col-2)) 
             #right
-            if is_valid_move([self.row+1, self.col+2], board):
+            if is_valid_move([self.row+1, self.col+2], board, self.color):
                 moves.append((self.row+1, self.col+2))
-            if is_valid_move([self.row-1, self.col+2], board):
+            if is_valid_move([self.row-1, self.col+2], board, self.color):
                 moves.append((self.row-1, self.col+2)) 
         if self.color == "b":
             #top
-            if is_valid_move([self.row+2, self.col-1], board):
+            if is_valid_move([self.row+2, self.col-1], board, self.color):
                 moves.append((self.row+2, self.col-1))
-            if is_valid_move([self.row+2, self.col+1], board):
+            if is_valid_move([self.row+2, self.col+1], board, self.color):
                 moves.append((self.row+2, self.col+1)) 
             #bottom 
-            if is_valid_move([self.row-2, self.col-1], board):
+            if is_valid_move([self.row-2, self.col-1], board, self.color):
                 moves.append((self.row-2, self.col-1))
-            if is_valid_move([self.row-2, self.col+1], board):
+            if is_valid_move([self.row-2, self.col+1], board, self.color):
                 moves.append((self.row-2, self.col+1)) 
             #left
-            if is_valid_move([self.row+1, self.col-2], board):
+            if is_valid_move([self.row+1, self.col-2], board, self.color):
                 moves.append((self.row+1, self.col-2))
-            if is_valid_move([self.row-1, self.col-2], board):
+            if is_valid_move([self.row-1, self.col-2], board, self.color):
                 moves.append((self.row-1, self.col-2)) 
             #right
-            if is_valid_move([self.row+1, self.col+2], board):
+            if is_valid_move([self.row+1, self.col+2], board, self.color):
                 moves.append((self.row+1, self.col+2))
-            if is_valid_move([self.row-1, self.col+2], board):
+            if is_valid_move([self.row-1, self.col+2], board, self.color):
                 moves.append((self.row-1, self.col+2)) 
         return moves
 
@@ -186,22 +204,15 @@ class Pawn(Piece):
             return "white_"+ __class__.__name__
         return "black_"+__class__.__name__
 
-     def move(self, screen, board, x , y):
-        
-        moves = self.possible_moves(board)
-        if not moves: return
-        for move in moves:
-            x = board_x + move[1]*SQUARE + self.col*overlap
-            y = board_y + move[0]*SQUARE + self.col*overlap
-            pygame.draw.rect(screen, (0, 255, 0), (x, y, SQUARE, SQUARE))
+     
 
      def possible_moves(self, board):
         moves = [] # all possible moves (row, col) format
         if self.color == "w":
             if self.first_move:
-                if is_valid_move([self.row-1, self.col], board):
+                if is_valid_move_pawn([self.row-1, self.col], board):
                     moves.append((self.row-1, self.col))
-                    if is_valid_move([self.row-2, self.col], board):
+                    if is_valid_move_pawn([self.row-2, self.col], board):
                         moves.append((self.row-2, self.col))
                 else:
                     print("invalid move")
@@ -214,9 +225,9 @@ class Pawn(Piece):
      
         if self.color == "b":
             if self.first_move:
-                if not board[self.row+1][self.col]:
+                if is_valid_move_pawn([self.row+1, self.col], board):
                     moves.append((self.row+1, self.col))
-                    if not board[self.row+2][self.col]:
+                    if is_valid_move_pawn([self.row+2, self.col], board):
                         moves.append((self.row+2, self.col))
                 else:
                     print("invalid move")
