@@ -45,9 +45,10 @@ def is_valid_move(target):
     target: [row, col]
     return: Boolean 
     """
-    #check if target location is empty
-    if not my_board.board[target[0]][target[1]]:
-        return True
+    if (0<=target[0]<=7) and (0<=target[1]<=7):
+        #check if target location is empty
+        if not my_board.board[target[0]][target[1]]:
+            return True
     return False
 
 
@@ -84,6 +85,7 @@ def main():
                     if match_moves(row, col, moves):
                         print("in board updatition")
                         if is_valid_move([row, col]):
+                            print(f"valid moves [{s_piece}:{moves}:{row, col}]")
                             #update board
                             my_board.board[s_piece.row][s_piece.col] = 0
                             s_piece.row = row
@@ -97,7 +99,7 @@ def main():
                             current_selected_piece = [0, 0]
 
         re_draw_window()
-        clock.tick(60) 
+        clock.tick(40) 
     pygame.quit()
 
 board = pygame.image.load(os.path.join("img", "grey-board.png"))
