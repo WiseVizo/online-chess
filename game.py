@@ -50,6 +50,14 @@ def is_valid_move(target, piece):
             #check if target location is empty
             if not my_board.board[target[0]][target[1]]:
                 return True
+            else:
+                #if its not empty
+                if my_board.board[target[0]][target[1]].color == piece.color:
+                    return False
+                else:
+                    #diff color 
+                    return True
+
         return False
     else:
         if (0<=target[0]<=7) and (0<=target[1]<=7):
@@ -75,7 +83,7 @@ def change_active_color():
         active_color = "w"
 
 def main():
-    global my_board, current_selected_piece
+    global my_board, current_selected_piece, active_color
     running = True
     while running:
         for event in pygame.event.get():

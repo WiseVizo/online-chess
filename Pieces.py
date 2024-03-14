@@ -33,15 +33,20 @@ overlap = 0.8
 offset_x = 10
 offset_y = 10
 
-def is_valid_move_pawn( target, board):
+
+def is_valid_move_pawn( target, board, color):
     """
     target: [row, col]
+    color: color of the current piece
     return: Boolean 
     """
     if (0<=target[0]<=7) and (0<=target[1]<=7):
         #check if target location is empty
         if not board[target[0]][target[1]]:
             return True
+        else:
+            return False
+
     return False
 
 def is_valid_move(target: list, board: list, color:str)->bool:
@@ -209,33 +214,58 @@ class Pawn(Piece):
      def possible_moves(self, board):
         moves = [] # all possible moves (row, col) format
         if self.color == "w":
+            
             if self.first_move:
-                if is_valid_move_pawn([self.row-1, self.col], board):
+                if is_valid_move_pawn([self.row-1, self.col], board, self.color):
                     moves.append((self.row-1, self.col))
-                    if is_valid_move_pawn([self.row-2, self.col], board):
+                    if is_valid_move_pawn([self.row-2, self.col], board, self.color):
                         moves.append((self.row-2, self.col))
-                else:
-                    print("invalid move")
             else:
                 if not board[self.row-1][self.col]:
                     moves.append((self.row-1, self.col))
-                else:
-                    print("invalid move")
+
+            #kill move
+            # left side
+            if (0<=self.row-1<=7) and (0<=self.col-1<=7):
+                if board[self.row-1][self.col-1]:
+                    #if its not the same color 
+                    if board[self.row-1][self.col-1].color != self.color:
+                        moves.append((self.row-1, self.col-1))
+                    
+            # right side
+            if (0<=self.row-1<=7) and (0<=self.col+1<=7):
+                if board[self.row-1][self.col+1]:
+                    #if its not the same color 
+                    if board[self.row-1][self.col+1].color != self.color:
+                        moves.append((self.row-1, self.col+1))
+                    
 
      
         if self.color == "b":
             if self.first_move:
-                if is_valid_move_pawn([self.row+1, self.col], board):
+                if is_valid_move_pawn([self.row+1, self.col], board, self.color):
                     moves.append((self.row+1, self.col))
-                    if is_valid_move_pawn([self.row+2, self.col], board):
+                    if is_valid_move_pawn([self.row+2, self.col], board, self.color):
                         moves.append((self.row+2, self.col))
-                else:
-                    print("invalid move")
             else:
                 if not board[self.row+1][self.col]:
                     moves.append((self.row+1, self.col))
-                else:
-                    print("invalid move")
+            
+            #kill move
+            # left side
+            if (0<=self.row+1<=7) and (0<=self.col-1<=7):
+                if board[self.row+1][self.col-1]:
+                    #if its not the same color 
+                    if board[self.row+1][self.col-1].color != self.color:
+                        moves.append((self.row+1, self.col-1))
+                    
+            # right side
+            if (0<=self.row+1<=7) and (0<=self.col+1<=7):
+                if board[self.row+1][self.col+1]:
+                    #if its not the same color 
+                    if board[self.row+1][self.col+1].color != self.color:
+                        moves.append((self.row+1, self.col+1))
+
         return moves
      
     
