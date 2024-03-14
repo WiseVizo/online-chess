@@ -34,6 +34,73 @@ offset_x = 10
 offset_y = 10
 
 
+def match_moves(row, col, moves):
+    """
+    checks if given row and col are present in moves list 
+    row: int
+    col: int
+    moves: [(row, col), ....]
+    return: True or False  
+    """
+    if not moves: return False
+    for move in moves:
+        if move[0] == row and move[1] == col:
+            return True
+    return False
+
+def is_king_safe(target: list[tuple], board: list[list], color)->bool:
+    """
+    tells if king will be safe in target position
+    target: [row, col]
+    color: kings color 
+    return: bool 
+    """
+    #for white king
+    if color == "w":
+        #get all black pieces
+        for row in range(8):
+            for col in range(8):
+                if board[row][col]:
+                    #if piece exist
+                    if board[row][col].color == "b":
+                        print("out")
+                        if "Pawn" in str(board[row][col]):
+                            print("in")
+                            moves = board[row][col].possible_moves(board)
+                            if match_moves(target[0], target[1], moves):
+                                if target[1] == col:
+                                    return True
+                                else:
+                                    return False
+                        else:
+                            moves = board[row][col].possible_moves(board)
+                            if match_moves(target[0], target[1], moves):
+                                return False
+
+        return True
+    
+    #for black king
+    if color == "b":
+        #get all white pieces
+        for row in range(8):
+            for col in range(8):
+                if board[row][col]:
+                    #if piece exist
+                    if board[row][col].color == "w":
+                        if "Pawn" in str(board[row][col]):
+                            moves = board[row][col].possible_moves(board)
+                            if match_moves(target[0], target[1], moves):
+                                if target[1] == col:
+                                    return True
+                                else:
+                                    return False
+                        else:
+                            moves = board[row][col].possible_moves(board)
+                            if match_moves(target[0], target[1], moves):
+                                return False
+
+        return True
+    
 def is_valid_move_pawn( target, board, color):
     """
     target: [row, col]
@@ -49,9 +116,15 @@ def is_valid_move_pawn( target, board, color):
 
     return False
 
+def is_valid_move_king(target: list[tuple], board: list[list], color)->bool:
+    if (0<=target[0]<=7) and (0<=target[1]<=7):
+        if is_king_safe(target, board, color):
+            return is_valid_move(target, board, color)
+    return False
+
 def is_valid_move(target: list, board: list, color:str)->bool:
     """
-    will tell if it is a valid move for all the other pieces except pawns
+    will tell if it is a valid move for all the other pieces except pawns and kings
     target: [row, col]
     board:  a 2d list of board 
     color: color of the current piece
@@ -122,6 +195,69 @@ class King(Piece):
         self.row = row
         self.col = column
         super().__init__( self.row, self.col, color, 0)
+    
+    def possible_moves(self, board):
+        moves = []
+        #white
+        if self.color == "w":
+            #top-right
+            if is_valid_move_king([self.row-1, self.col+1], board, self.color):
+                moves.append((self.row-1, self.col+1))
+            #top
+            if is_valid_move_king([self.row-1, self.col], board, self.color):
+                moves.append((self.row-1, self.col))
+            #top-left
+            if is_valid_move_king([self.row-1, self.col-1], board, self.color):
+                moves.append((self.row-1, self.col-1))
+            #bottom-left
+            if is_valid_move_king([self.row+1, self.col-1], board, self.color):
+                moves.append((self.row+1, self.col-1))
+            #bottom
+            if is_valid_move_king([self.row+1, self.col], board, self.color):
+                moves.append((self.row+1, self.col))
+            #bottom-right
+            if is_valid_move_king([self.row+1, self.col+1], board, self.color):
+                moves.append((self.row+1, self.col+1))
+            #right
+            if is_valid_move_king([self.row, self.col+1], board, self.color):
+                moves.append((self.row, self.col+1))
+            #left
+            if is_valid_move_king([self.row, self.col-1], board, self.color):
+                moves.append((self.row, self.col-1))
+        #black
+        if self.color == "b":
+            #top-right
+            if is_valid_move_king([self.row-1, self.col+1], board, self.color):
+                moves.append((self.row-1, self.col+1))
+            #top
+            if is_valid_move_king([self.row-1, self.col], board, self.color):
+                moves.append((self.row-1, self.col))
+            #top-left
+            if is_valid_move_king([self.row-1, self.col-1], board, self.color):
+                moves.append((self.row-1, self.col-1))
+            #bottom-left
+            if is_valid_move_king([self.row+1, self.col-1], board, self.color):
+                moves.append((self.row+1, self.col-1))
+            #bottom
+            if is_valid_move_king([self.row+1, self.col], board, self.color):
+                moves.append((self.row+1, self.col))
+            #bottom-right
+            if is_valid_move_king([self.row+1, self.col+1], board, self.color):
+                moves.append((self.row+1, self.col+1))
+            #right
+            if is_valid_move_king([self.row, self.col+1], board, self.color):
+                moves.append((self.row, self.col+1))
+            #left
+            if is_valid_move_king([self.row, self.col-1], board, self.color):
+                moves.append((self.row, self.col-1))
+
+        return moves
+    
+    def __str__(self) -> str:
+        if self.color == "w":
+            return "white_"+ __class__.__name__
+        return "black_"+__class__.__name__
+
     
 class Queen(Piece):
      def __init__(self,  row, column, color):

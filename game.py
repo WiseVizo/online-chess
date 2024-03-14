@@ -133,7 +133,7 @@ def main():
                             
 
         re_draw_window()
-        clock.tick(40) 
+        clock.tick(20) 
     pygame.quit()
 
 board = pygame.image.load(os.path.join("img", "grey-board.png"))
