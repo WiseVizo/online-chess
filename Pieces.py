@@ -132,6 +132,122 @@ class Rook(Piece):
         self.row = row
         self.col = column
         super().__init__( self.row, self.col, color, 2)
+
+     def possible_moves(self, board):
+        moves = []
+        #for white
+        if self.color == "w":
+            #top
+            i = 1
+            while True:
+                if is_valid_move([self.row-i, self.col], board, self.color):
+                    moves.append((self.row-i, self.col))
+                    if board[self.row-i][self.col]:
+                        # piece exist
+                        if board[self.row-i][self.col].color != self.color:
+                            # diff color piece exist
+                            break
+                    i+=1
+                    continue
+                break
+            #bottom
+            i = 1
+            while True:
+                if is_valid_move([self.row+i, self.col], board, self.color):
+                    moves.append((self.row+i, self.col))
+                    if board[self.row+i][self.col]:
+                        # piece exist
+                        if board[self.row+i][self.col].color != self.color:
+                            # diff color piece exist
+                            break
+                    i+=1
+                    continue
+                break
+            #left
+            i = 1
+            while True:
+                if is_valid_move([self.row, self.col-i], board, self.color):
+                    moves.append((self.row, self.col-i))
+                    if board[self.row][self.col-i]:
+                        # piece exist
+                        if board[self.row][self.col-i].color != self.color:
+                            # diff color piece exist
+                            break
+                    i+=1
+                    continue
+                break
+            #right
+            i = 1
+            while True:
+                if is_valid_move([self.row, self.col+i], board, self.color):
+                    moves.append((self.row, self.col+i))
+                    if board[self.row][self.col+i]:
+                        # piece exist
+                        if board[self.row][self.col+i].color != self.color:
+                            # diff color piece exist
+                            break
+                    i+=1
+                    continue
+                break
+        #for black
+        if self.color == "b":
+            #top
+            i = 1
+            while True:
+                if is_valid_move([self.row-i, self.col], board, self.color):
+                    moves.append((self.row-i, self.col))
+                    if board[self.row-i][self.col]:
+                        # piece exist
+                        if board[self.row-i][self.col].color != self.color:
+                            # diff color piece exist
+                            break
+                    i+=1
+                    continue
+                break
+            #bottom
+            i = 1
+            while True:
+                if is_valid_move([self.row+i, self.col], board, self.color):
+                    moves.append((self.row+i, self.col))
+                    if board[self.row+i][self.col]:
+                        # piece exist
+                        if board[self.row+i][self.col].color != self.color:
+                            # diff color piece exist
+                            break
+                    i+=1
+                    continue
+                break
+            #left
+            i = 1
+            while True:
+                if is_valid_move([self.row, self.col-i], board, self.color):
+                    moves.append((self.row, self.col-i))
+                    if board[self.row][self.col-i]:
+                        # piece exist
+                        if board[self.row][self.col-i].color != self.color:
+                            # diff color piece exist
+                            break
+                    i+=1
+                    continue
+                break
+            #right
+            i = 1
+            while True:
+                if is_valid_move([self.row, self.col+i], board, self.color):
+                    moves.append((self.row, self.col+i))
+                    if board[self.row][self.col+i]:
+                        # piece exist
+                        if board[self.row][self.col+i].color != self.color:
+                            # diff color piece exist
+                            break
+                    i+=1
+                    continue
+                break
+        return moves
+     def __str__(self) -> str:
+        if self.color == "w":
+            return "white_"+ __class__.__name__
+        return "black_"+__class__.__name__
 class Bishop(Piece):
      def __init__(self,  row, column, color):
         self.row = row
