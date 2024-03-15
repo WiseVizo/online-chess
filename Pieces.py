@@ -72,6 +72,7 @@ def is_king_safe(target: list[tuple], board: list[list], color)->bool:
                                     return True
                                 else:
                                     return False
+                                
                         else:
                             moves = board[row][col].possible_moves(board)
                             if match_moves(target[0], target[1], moves):
@@ -79,27 +80,27 @@ def is_king_safe(target: list[tuple], board: list[list], color)->bool:
 
         return True
     
-    #for black king
-    if color == "b":
-        #get all white pieces
-        for row in range(8):
-            for col in range(8):
-                if board[row][col]:
-                    #if piece exist
-                    if board[row][col].color == "w":
-                        if "Pawn" in str(board[row][col]):
-                            moves = board[row][col].possible_moves(board)
-                            if match_moves(target[0], target[1], moves):
-                                if target[1] == col:
-                                    return True
-                                else:
-                                    return False
-                        else:
-                            moves = board[row][col].possible_moves(board)
-                            if match_moves(target[0], target[1], moves):
-                                return False
+    # #for black king
+    # if color == "b":
+    #     #get all white pieces
+    #     for row in range(8):
+    #         for col in range(8):
+    #             if board[row][col]:
+    #                 #if piece exist
+    #                 if board[row][col].color == "w":
+    #                     if "Pawn" in str(board[row][col]):
+    #                         moves = board[row][col].possible_moves(board)
+    #                         if match_moves(target[0], target[1], moves):
+    #                             if target[1] == col:
+    #                                 return True
+    #                             else:
+    #                                 return False
+    #                     else:
+    #                         moves = board[row][col].possible_moves(board)
+    #                         if match_moves(target[0], target[1], moves):
+    #                             return False
 
-        return True
+    #     return True
     
 def is_valid_move_pawn( target, board, color):
     """
@@ -159,8 +160,8 @@ class Piece:
     def is_selected(self):
         return self.selected
     
-    def move(self, screen, board, x, y):
-        moves = self.possible_moves(board)
+    def move(self, screen, board, x, y, moves):
+        # moves = self.possible_moves(board)
         if not moves: return
         for move in moves:
             x = board_x + move[1]*SQUARE + self.col*overlap
@@ -171,7 +172,7 @@ class Piece:
     def possible_moves(self, board):
         pass
 
-    def draw(self, screen, board):
+    def draw(self, screen, board, moves):
         if self.color == "w":
             self.image = W[self.piece_index]
         else:
@@ -181,7 +182,7 @@ class Piece:
         screen.blit(self.image, (x+ offset_x, y+ offset_y))
         if self.selected:
             # pygame.draw.rect(screen, (255, 0, 0), (x, y, SQUARE, SQUARE), 2)
-            self.move(screen, board, x, y)
+            self.move(screen, board, x, y, moves)
     
     
 
@@ -190,6 +191,8 @@ class Piece:
             return "white_"+ __class__.__name__
         return "black_"+__class__.__name__
 
+count = 0
+
 class King(Piece):
     def __init__(self,  row, column, color):
         self.row = row
@@ -197,6 +200,9 @@ class King(Piece):
         super().__init__( self.row, self.col, color, 0)
     
     def possible_moves(self, board):
+        global count
+        count+=1
+        print(f"count: {count}")
         moves = []
         #white
         if self.color == "w":
@@ -610,6 +616,9 @@ class Bishop(Piece):
         super().__init__( self.row, self.col, color, 3)
     
      def possible_moves(self, board):
+        global count
+        count+=1
+        print(f"count: {count}")
         moves = []
         #white
         if self.color == "w":

@@ -37,12 +37,12 @@ class Board:
             self.board[7][3] = Queen(7, 3, "w")
             self.board[7][4] = King(7, 4, "w")
             
-    def draw_board(self, screen):
+    def draw_board(self, screen, moves):
         for row in range(8):
             for col in range(8):
                 # pygame.draw.rect(screen, (255, 0 , 0), (board_x + (col*sqr+col*overlap), board_y + (row*sqr + row*overlap), sqr, sqr), 1)
                 if self.board[row][col]:
-                    self.board[row][col].draw(screen, self.board)
+                    self.board[row][col].draw(screen, self.board, moves)
 
     def selected_piece(self):
         """

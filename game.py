@@ -16,7 +16,7 @@ def on_click(pos):
 def re_draw_window():
     win.fill("purple")
     win.blit(Board_img, (board_x, board_y))
-    my_board.draw_board(win)  
+    my_board.draw_board(win, moves)  
     pygame.display.update()
 
 def is_within_board(row, col):
@@ -82,54 +82,60 @@ def change_active_color():
     else:
         active_color = "w"
 
+c = 0
+
 def main():
-    global my_board, current_selected_piece, active_color
+    global my_board, current_selected_piece, active_color, c, moves
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                row, col = on_click(pos)
-                print(row, col)
-                if is_within_board(row, col):
-                    if my_board.board[row][col]:
-                        if my_board.board[row][col].color == active_color:
-                            if current_selected_piece[0] == 0:
-                                current_selected_piece[0] = (row, col)
-                                my_board.board[row][col].selected = True
-                            elif current_selected_piece[0] and not current_selected_piece[1]:
-                                my_board.board[current_selected_piece[0][0]][current_selected_piece[0][1]].selected = False
-                                current_selected_piece[1] = (row, col)
-                                my_board.board[row][col].selected = True
-                            elif current_selected_piece[0] and current_selected_piece[1]:
-                                my_board.board[current_selected_piece[1][0]][current_selected_piece[1][1]].selected = False
-                                current_selected_piece[0] = current_selected_piece[1]
-                                current_selected_piece[1] = (row, col)
-                                my_board.board[row][col].selected = True
-                s_piece = my_board.selected_piece()
-                if s_piece:
-                    moves = s_piece.possible_moves(my_board.board)
-                    print(f"moves for [{s_piece}]:  {moves}")
+                if event.button == 1:  # Check for left mouse button
+                    pos = pygame.mouse.get_pos()
+                    row, col = on_click(pos)
+                    print(row, col)
+                    if is_within_board(row, col):
+                        if my_board.board[row][col]:
+                            if my_board.board[row][col].color == active_color:
+                                if current_selected_piece[0] == 0:
+                                    current_selected_piece[0] = (row, col)
+                                    my_board.board[row][col].selected = True
+                                elif current_selected_piece[0] and not current_selected_piece[1]:
+                                    my_board.board[current_selected_piece[0][0]][current_selected_piece[0][1]].selected = False
+                                    current_selected_piece[1] = (row, col)
+                                    my_board.board[row][col].selected = True
+                                elif current_selected_piece[0] and current_selected_piece[1]:
+                                    my_board.board[current_selected_piece[1][0]][current_selected_piece[1][1]].selected = False
+                                    current_selected_piece[0] = current_selected_piece[1]
+                                    current_selected_piece[1] = (row, col)
+                                    my_board.board[row][col].selected = True
+                    s_piece = my_board.selected_piece()
+                    if s_piece:
+                        c+=1
+                        print(f"Main count: {c}")
+                        moves = s_piece.possible_moves(my_board.board)
 
-                    if match_moves(row, col, moves):
-                        print("in board updatition")
+                        print(f"moves for [{s_piece}]: {moves}")
+                        if match_moves(row, col, moves):
+                            print("in board updatition")
 
-                        if is_valid_move([row, col], s_piece):
-                            print(f"valid moves [{s_piece}:{moves}:{row, col}]")
-                            #update board
-                            my_board.board[s_piece.row][s_piece.col] = 0
-                            s_piece.row = row
-                            s_piece.col = col
-                            my_board.board[row][col] = s_piece
-                            # special case for pawns
-                            if "Pawn" in str(s_piece):
-                                s_piece.first_move = False
-                            #reset
-                            s_piece.selected = False
-                            current_selected_piece = [0, 0]
-                            change_active_color()
+                            if is_valid_move([row, col], s_piece):
+                                print(f"valid moves [{s_piece}:{moves}:{row, col}]")
+                                #update board
+                                my_board.board[s_piece.row][s_piece.col] = 0
+                                s_piece.row = row
+                                s_piece.col = col
+                                my_board.board[row][col] = s_piece
+                                # special case for pawns
+                                if "Pawn" in str(s_piece):
+                                    s_piece.first_move = False
+                                #reset
+                                s_piece.selected = False
+                                current_selected_piece = [0, 0]
+                                change_active_color()
+                                
                             
 
         re_draw_window()
@@ -160,4 +166,6 @@ current_selected_piece = [0, 0] # it is to keep track of previous selected piece
 
 #keeping track of which color piece turn it is
 active_color = "w"
+#keeping track of selected moves
+moves = []
 main()
