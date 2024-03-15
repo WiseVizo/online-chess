@@ -63,16 +63,22 @@ def is_king_safe(target: list[tuple], board: list[list], color)->bool:
                 if board[row][col]:
                     #if piece exist
                     if board[row][col].color == "b":
-                        print("out")
                         if "Pawn" in str(board[row][col]):
-                            print("in")
                             moves = board[row][col].possible_moves(board)
                             if match_moves(target[0], target[1], moves):
                                 if target[1] == col:
                                     return True
                                 else:
                                     return False
-                                
+                        elif "King" in str(board[row][col]):
+                            king = board[row][col]
+                            moves = [(king.row-1, king.col-1),(king.row-1, king.col),
+                                     (king.row-1, king.col+1), (king.row, king.col-1), 
+                                     (king.row, king.col), (king.row, king.col+1),
+                                     (king.row+1, king.col-1), (king.row+1, king.col),
+                                     (king.row+1, king.col+1)]
+                            if match_moves(target[0], target[1], moves):
+                                return False
                         else:
                             moves = board[row][col].possible_moves(board)
                             if match_moves(target[0], target[1], moves):
@@ -80,27 +86,36 @@ def is_king_safe(target: list[tuple], board: list[list], color)->bool:
 
         return True
     
-    # #for black king
-    # if color == "b":
-    #     #get all white pieces
-    #     for row in range(8):
-    #         for col in range(8):
-    #             if board[row][col]:
-    #                 #if piece exist
-    #                 if board[row][col].color == "w":
-    #                     if "Pawn" in str(board[row][col]):
-    #                         moves = board[row][col].possible_moves(board)
-    #                         if match_moves(target[0], target[1], moves):
-    #                             if target[1] == col:
-    #                                 return True
-    #                             else:
-    #                                 return False
-    #                     else:
-    #                         moves = board[row][col].possible_moves(board)
-    #                         if match_moves(target[0], target[1], moves):
-    #                             return False
+    #for black king
+    if color == "b":
+        #get all white pieces
+        for row in range(8):
+            for col in range(8):
+                if board[row][col]:
+                    #if piece exist
+                    if board[row][col].color == "w":
+                        if "Pawn" in str(board[row][col]):
+                            moves = board[row][col].possible_moves(board)
+                            if match_moves(target[0], target[1], moves):
+                                if target[1] == col:
+                                    return True
+                                else:
+                                    return False
+                        elif "King" in str(board[row][col]):
+                            king = board[row][col]
+                            moves = [(king.row-1, king.col-1),(king.row-1, king.col),
+                                     (king.row-1, king.col+1), (king.row, king.col-1), 
+                                     (king.row, king.col), (king.row, king.col+1),
+                                     (king.row+1, king.col-1), (king.row+1, king.col),
+                                     (king.row+1, king.col+1)]
+                            if match_moves(target[0], target[1], moves):
+                                return False
+                        else:
+                            moves = board[row][col].possible_moves(board)
+                            if match_moves(target[0], target[1], moves):
+                                return False
 
-    #     return True
+        return True
     
 def is_valid_move_pawn( target, board, color):
     """
@@ -616,9 +631,6 @@ class Bishop(Piece):
         super().__init__( self.row, self.col, color, 3)
     
      def possible_moves(self, board):
-        global count
-        count+=1
-        print(f"count: {count}")
         moves = []
         #white
         if self.color == "w":
