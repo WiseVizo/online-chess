@@ -64,12 +64,11 @@ def is_king_safe(target: list[tuple], board: list[list], color)->bool:
                     #if piece exist
                     if board[row][col].color == "b":
                         if "Pawn" in str(board[row][col]):
-                            moves = board[row][col].possible_moves(board)
+                            pawn = board[row][col]
+                            # all black pawn attack moves
+                            moves = [(pawn.row+1, pawn.col-1), (pawn.row+1, pawn.col+1)]
                             if match_moves(target[0], target[1], moves):
-                                if target[1] == col:
-                                    return True
-                                else:
-                                    return False
+                                return False
                         elif "King" in str(board[row][col]):
                             king = board[row][col]
                             moves = [(king.row-1, king.col-1),(king.row-1, king.col),
@@ -95,12 +94,11 @@ def is_king_safe(target: list[tuple], board: list[list], color)->bool:
                     #if piece exist
                     if board[row][col].color == "w":
                         if "Pawn" in str(board[row][col]):
-                            moves = board[row][col].possible_moves(board)
+                            pawn = board[row][col]
+                            # all white pawn kill moves
+                            moves = [(pawn.row-1, pawn.col-1), (pawn.row-1, pawn.col+1)]
                             if match_moves(target[0], target[1], moves):
-                                if target[1] == col:
-                                    return True
-                                else:
-                                    return False
+                                return False
                         elif "King" in str(board[row][col]):
                             king = board[row][col]
                             moves = [(king.row-1, king.col-1),(king.row-1, king.col),
